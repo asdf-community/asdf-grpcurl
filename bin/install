@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+function install() {
+  # local install_type=$1
+  local version="$2"
+  local install_path="$3"
+  local bin_install_path="${install_path}/bin"
+  local file="grpcurl"
+  local os_type
+  [[ "$(uname -s)" == "Linux" ]] && os_type="linux" ||  os_type="osx"
+  local download_url="https://github.com/fullstorydev/grpcurl/releases/download/v${version}/grpcurl_${version}_${os_type}_x86_64.tar.gz"
+
+  echo "Downloading grpcurl from ${download_url}"
+
+  mkdir -p "$bin_install_path"
+  curl -sL "$download_url" | tar xz -C "$bin_install_path" "$file"
+}
+
+install "$ASDF_INSTALL_TYPE" "$ASDF_INSTALL_VERSION" "$ASDF_INSTALL_PATH"
+# vim: ai ts=2 sw=2 et sts=2 ft=sh

@@ -8,14 +8,29 @@ function install() {
   local install_path="$3"
   local bin_install_path="${install_path}/bin"
   local file="grpcurl"
-  local os_type
-  [[ "$(uname -s)" == "Linux" ]] && os_type="linux" ||  os_type="osx"
-  local download_url="https://github.com/fullstorydev/grpcurl/releases/download/v${version}/grpcurl_${version}_${os_type}_x86_64.tar.gz"
+  local platform="$(get_os)_$(get_arch)"
+  local download_url="https://github.com/fullstorydev/grpcurl/releases/download/v${version}/grpcurl_${version}_${platform}.tar.gz"
 
   echo "Downloading grpcurl from ${download_url}"
 
   mkdir -p "$bin_install_path"
   curl -sL "$download_url" | tar xz -C "$bin_install_path" "$file"
+}
+
+function get_os() {
+  local os=$(uname -s | tr '[:upper:]' '[:lower:]')
+  case $os in
+    darwin) os="osx" ;;
+  esac
+  echo "$os"
+}
+
+function get_arch() {
+  local arch=$(uname -m)
+  case $arch in
+    arm64|aarch64) arch="arm64" ;;
+  esac
+  echo "$arch"
 }
 
 install "$ASDF_INSTALL_TYPE" "$ASDF_INSTALL_VERSION" "$ASDF_INSTALL_PATH"

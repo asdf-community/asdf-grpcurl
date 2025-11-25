@@ -16,12 +16,12 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: asdf-vm/actions/plugin-test@v1
       with:
         command: grpcurl --version
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - run: make lint
